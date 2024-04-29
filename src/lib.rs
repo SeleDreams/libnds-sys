@@ -123,7 +123,7 @@ macro_rules! print {
     ($($arg:tt)*) => ({
         use core::fmt::Write;
         let mut writer = libnds_sys::Buffer::new();
-        let _ = write!(&mut writer, "{}", format_args!($($arg)*));
+        let _ = write!(&mut writer, "{}\0", format_args!($($arg)*));
         unsafe {
             printf("%s\0".as_ptr() as *const core::ffi::c_char, writer.buf().as_ptr() as *const core::ffi::c_char);
         }
@@ -135,7 +135,7 @@ macro_rules! println {
     ($($arg:tt)*) => ({
         use core::fmt::Write;
         let mut writer = libnds_sys::Buffer::new();
-        let _ = write!(&mut writer, "{}\n", format_args!($($arg)*));
+        let _ = write!(&mut writer, "{}\n\0", format_args!($($arg)*));
         unsafe {
             printf("%s\0".as_ptr() as *const core::ffi::c_char, writer.buf().as_ptr() as *const core::ffi::c_char);
         }
