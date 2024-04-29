@@ -119,6 +119,18 @@ impl fmt::Write for Buffer {
 }
 
 #[macro_export]
+macro_rules! print {
+    ($($arg:tt)*) => ({
+        use core::fmt::Write;
+        let mut writer = libnds_sys::Buffer::new();
+        let _ = write!(&mut writer, "{}", format_args!($($arg)*));
+        unsafe {
+            printf("%s\0".as_ptr() as *const core::ffi::c_char, writer.buf().as_ptr() as *const core::ffi::c_char);
+        }
+    });
+}
+
+#[macro_export]
 macro_rules! println {
     ($($arg:tt)*) => ({
         use core::fmt::Write;
