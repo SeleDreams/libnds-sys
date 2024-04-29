@@ -1,0 +1,11 @@
+target
+Cargo.lock
+src/arm7_bindings.c
+src/arm7_bindings.rs
+src/arm9_bindings.c
+src/arm9_bindings.rs
+src/dswifi7.rs
+src/maxmod7.c
+src/maxmod7.rs
+src/maxmod9.c
+src/maxmod9.rs
