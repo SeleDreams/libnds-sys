@@ -2,6 +2,8 @@
 #![feature(start)]
 #![feature(const_fn_floating_point_arithmetic)]
 
+use alloc::fmt;
+use alloc::vec::Vec;
 extern crate alloc;
 
 #[allow(
@@ -90,3 +92,40 @@ mod atomics;
 #[cfg(target_os = "nintendo_ds_arm7")]
 #[no_mangle]
 pub static __debugger_unit: c_char = 0;
+
+pub struct Buffer {
+    buf: Vec<u8>,
+}
+
+impl Buffer {
+    pub fn new() -> Self
+    {
+        Self {
+            buf: Vec::new()
+        }
+    }
+    pub fn buf(&mut self) -> &mut Vec<u8> {
+        &mut self.buf
+    }
+}
+
+impl fmt::Write for Buffer {
+    fn write_str(&mut self, s: &str) -> fmt::Result {
+        for byte in s.bytes() {
+            self.buf.push(byte);
+        }
+        Ok(())
+    }
+}
+
+#[macro_export]
+macro_rules! println {
+    ($($arg:tt)*) => ({
+        use core::fmt::Write;
+        let mut writer = libnds_sys::Buffer::new();
+        let _ = write!(&mut writer, "{}\n", format_args!($($arg)*));
+        unsafe {
+            printf("%s\0".as_ptr() as *const core::ffi::c_char, writer.buf().as_ptr() as *const core::ffi::c_char);
+        }
+    });
+}
