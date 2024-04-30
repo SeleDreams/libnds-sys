@@ -46,7 +46,6 @@ pub mod dswifi7;
 )]
 pub mod maxmod7;
 
-#[cfg(target_os = "nintendo_ds_arm7")]
 #[allow(
     non_upper_case_globals,
     non_camel_case_types,
