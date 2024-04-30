@@ -125,7 +125,7 @@ macro_rules! print {
         let mut writer = libnds_sys::Buffer::new();
         let _ = write!(&mut writer, "{}\0", format_args!($($arg)*));
         unsafe {
-            printf("%s\0".as_ptr() as *const core::ffi::c_char, writer.buf().as_ptr() as *const core::ffi::c_char);
+           libnds_sys::arm9_bindings::printf("%s\0".as_ptr() as *const core::ffi::c_char, writer.buf().as_ptr() as *const core::ffi::c_char);
         }
     });
 }
@@ -137,7 +137,7 @@ macro_rules! println {
         let mut writer = libnds_sys::Buffer::new();
         let _ = write!(&mut writer, "{}\n\0", format_args!($($arg)*));
         unsafe {
-            printf("%s\0".as_ptr() as *const core::ffi::c_char, writer.buf().as_ptr() as *const core::ffi::c_char);
+            libnds_sys::arm9_bindings::printf("%s\0".as_ptr() as *const core::ffi::c_char, writer.buf().as_ptr() as *const core::ffi::c_char);
         }
     });
 }
