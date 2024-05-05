@@ -13,4 +13,4 @@ name = "libnds_sys"
 
 [build-dependencies]
 cc = "1.0.79"
-bindgen = { git = "https://github.com/jbaublitz/rust-bindgen.git",branch="bindgen-fallback-fix", features=["experimental"]}
+bindgen = { git = "https://github.com/rust-lang/rust-bindgen.git",branch="main", features=["experimental"]}

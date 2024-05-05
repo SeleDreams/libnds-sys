@@ -1,4 +1,4 @@
-use std::{env, path::PathBuf};
+use std::env;
 fn main() {
     let target_os = env::var("CARGO_CFG_TARGET_OS").unwrap_or_else(|_| {
         println!("cargo:error=You must provide a target OS; either nintendo_ds_arm9 or nintendo_ds_arm7 is supported.");
@@ -232,8 +232,7 @@ fn arm9_main(wonderful_path: &str, blocksds_path: &str, profile: &str) {
             "-isystem{}/toolchain/gcc-arm-none-eabi/arm-none-eabi/include",
             wonderful_path
         ))
-        .header(format!("{}/libs/libnds/include/nds.h", blocksds_path))
-        .header(format!("{}/libs/dswifi/include/dswifi9.h", blocksds_path))
+        .header("wrapper.h")
         .wrap_static_fns(true)
         .wrap_static_fns_path("src/arm9_bindings.c")
         .use_core()
@@ -252,43 +251,10 @@ fn arm9_main(wonderful_path: &str, blocksds_path: &str, profile: &str) {
         // Unwrap the Result and panic on failure.
         .expect("Unable to generate bindings");
 
-    // Write the bindings to the $OUT_DIR/bindings.rs file.
     bindings
         .write_to_file("src/arm9_bindings.rs")
         .expect("Couldn't write bindings!");
-    let maxmod_bindings = bindgen::Builder::default()
-        // The input header we would like to generate
-        // bindings for.
-        .clang_arg(format!("-I{}/libs/libnds/include", blocksds_path))
-        .clang_arg(format!("-I{}/libs/dswifi/include", blocksds_path))
-        .clang_arg(format!("-I{}/libs/maxmod/include", blocksds_path))
-        .clang_arg(format!(
-            "-isystem{}/toolchain/gcc-arm-none-eabi/arm-none-eabi/include",
-            wonderful_path
-        ))
-        .header(format!("{}/libs/maxmod/include/maxmod9.h", blocksds_path))
-        .wrap_static_fns(true)
-        .wrap_static_fns_path("src/maxmod9.c")
-        .use_core()
-        .trust_clang_mangling(false)
-        .prepend_enum_name(false)
-        .clang_arg("-mfloat-abi=soft")
-        // Tell cargo to invalidate the built crate whenever any of the
-        // included header files changed.
-        .clang_arg("-DARM9")
-        .clang_arg("-D__NDS__")
-        .clang_macro_fallback()
-        .clang_macro_fallback_build_dir(".")
-        .wrap_unsafe_ops(true)
-        // Finish the builder and generate the bindings.
-        .generate()
-        // Unwrap the Result and panic on failure.
-        .expect("Unable to generate bindings");
-
-    // Write the bindings to the $OUT_DIR/bindings.rs file.
-    maxmod_bindings
-        .write_to_file("src/maxmod9.rs")
-        .expect("Couldn't write bindings!");
+    
 
         cc::Build::new()
         .include(env::var("CARGO_MANIFEST_DIR").unwrap())
@@ -301,7 +267,6 @@ fn arm9_main(wonderful_path: &str, blocksds_path: &str, profile: &str) {
         ))
             .object(format!("{}/sys/crts/ds_arm9_crt0.o", &blocksds_path))
             .file("src/arm9_bindings.c")
-            .file("src/maxmod9.c")
             .compiler(format!(
                 "{}/toolchain/gcc-arm-none-eabi/bin/arm-none-eabi-gcc",
                 wonderful_path
