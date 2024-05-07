@@ -13,9 +13,9 @@ fn main() {
     println!("cargo:rustc-link-search=native={blocksds_path}/libs/dswifi/lib");
     println!("cargo:rustc-link-search=native={blocksds_path}/libs/maxmod/lib");
 
-    println!(
+   /*  println!(
         "cargo:rustc-link-search=native={wonderful_path}/toolchain/gcc-arm-none-eabi/lib/gcc/arm-none-eabi/13.2.0/thumb"
-    );
+    );*/
    
     match target_os.as_str() {
         "nintendo_ds_arm9" => arm9_main(&wonderful_path, &blocksds_path, &profile),
@@ -48,7 +48,7 @@ fn arm7_main(wonderful_path: &str, blocksds_path: &str, profile: &str) {
     );
     println!("cargo:rustc-link-lib=static=mm7");
     println!("cargo:rustc-link-lib=static=c");
-    println!("cargo:rustc-link-lib=static=gcc");
+    //println!("cargo:rustc-link-lib=static=gcc");
     println!("cargo:rustc-link-lib=static=m");
     println!("cargo:rustc-link-arg=Wl,--end-group");
     let bindings = bindgen::Builder::default()
@@ -219,7 +219,7 @@ fn arm9_main(wonderful_path: &str, blocksds_path: &str, profile: &str) {
     );
     println!("cargo:rustc-link-lib=static=mm9");
     println!("cargo:rustc-link-lib=static=c");
-    println!("cargo:rustc-link-lib=static=gcc");
+    //println!("cargo:rustc-link-lib=static=gcc");
     println!("cargo:rustc-link-lib=static=m");
     println!("cargo:rustc-link-arg=Wl,--end-group");
     let bindings = bindgen::Builder::default()
