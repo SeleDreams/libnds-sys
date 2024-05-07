@@ -143,6 +143,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
+# BlocksDS's crt0
+**The crt0 is licensed under the MPL license. Due to its length, I included a link to it**
+
+[https://github.com/blocksds/sdk/blob/master/sys/crts/COPYING.mpl2](https://github.com/blocksds/sdk/blob/master/sys/crts/COPYING.mpl2)
+
 # PicoLibC
 As PicoLibC includes many license, it would be difficult to all include them here. As such, I will redirect you to the [github repository of the project](https://github.com/picolibc/picolibc/tree/main), which includes the license files.
 # libgcc
