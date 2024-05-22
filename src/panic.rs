@@ -32,11 +32,11 @@ fn panic(info: &core::panic::PanicInfo) -> ! {
         };
 
         if let Some(m) = info.message() {
-            write!(ConsoleWriter, "PANIC: {m}\n at {file}:{line}");
+            let _ = write!(ConsoleWriter, "PANIC: {m}\n at {file}:{line}");
         } else if let Some(m) = info.payload().downcast_ref::<&str>() {
-            write!(ConsoleWriter, "PANIC: {m}\n at {file}:{line}");
+            let _ = write!(ConsoleWriter, "PANIC: {m}\n at {file}:{line}");
         } else {
-            write!(ConsoleWriter, "PANIC: (no message)\n at {file}:{line}");
+            let _ = write!(ConsoleWriter, "PANIC: (no message)\n at {file}:{line}");
         }
     }
 
