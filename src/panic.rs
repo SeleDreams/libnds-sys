@@ -31,14 +31,9 @@ fn panic(info: &core::panic::PanicInfo) -> ! {
             None => ("(unknown file)", 0),
         };
 
-        if let Some(m) = info.message() {
-            let _ = write!(ConsoleWriter, "PANIC: {m}\n at {file}:{line}");
-        } else if let Some(m) = info.payload().downcast_ref::<&str>() {
-            let _ = write!(ConsoleWriter, "PANIC: {m}\n at {file}:{line}");
-        } else {
-            let _ = write!(ConsoleWriter, "PANIC: (no message)\n at {file}:{line}");
-        }
+        let message = info.message();
+        
+        let _ = write!(ConsoleWriter, "PANIC: {message}\n at {file}:{line}");
     }
-
     loop {}
 }
