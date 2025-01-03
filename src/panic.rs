@@ -15,7 +15,10 @@ fn panic(info: &core::panic::PanicInfo) -> ! {
                 // it's best to not require any allocations for printing the panic message
                 for c in s.bytes() {
                     unsafe {
-                        crate::arm9_bindings::printf("%c\0".as_ptr() as *const core::ffi::c_char, c as core::ffi::c_int);
+                        crate::arm9_bindings::printf(
+                            "%c\0".as_ptr() as *const core::ffi::c_char,
+                            c as core::ffi::c_int,
+                        );
                     }
                 }
                 Ok(())
@@ -31,13 +34,8 @@ fn panic(info: &core::panic::PanicInfo) -> ! {
             None => ("(unknown file)", 0),
         };
 
-        if let Some(m) = info.message() {
-            let _ = write!(ConsoleWriter, "PANIC: {m}\n at {file}:{line}");
-        } else if let Some(m) = info.payload().downcast_ref::<&str>() {
-            let _ = write!(ConsoleWriter, "PANIC: {m}\n at {file}:{line}");
-        } else {
-            let _ = write!(ConsoleWriter, "PANIC: (no message)\n at {file}:{line}");
-        }
+        let message = info.message();
+        let _ = write!(ConsoleWriter, "PANIC: {message}\n at {file}:{line}");
     }
 
     loop {}
